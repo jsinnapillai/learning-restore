@@ -4,10 +4,12 @@ import TableCell from "@mui/material/TableCell/TableCell";
 import TableContainer from "@mui/material/TableContainer/TableContainer";
 import TableRow from "@mui/material/TableRow/TableRow";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../../models/products";
+import agent from "../../api/agent";
+import NotFound from "../../errors/NotFound";
+import Loading from "../../layout/Loading";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,17 +18,16 @@ const ProductDetail = () => {
 
   useEffect(() => {
     setIsloading(true);
-    axios
-      .get(`http://localhost:5000/api/Products/${id}`)
-      .then((response) => setProduct(response.data))
-      .catch((error) => console.log(error))
-      .finally(() => setIsloading(false));
+    id &&
+      agent.Catalog.details(parseInt(id))
+        .then((response) => setProduct(response))
+        .catch((error) => console.log(error))
+        .finally(() => setIsloading(false));
   }, [id]);
 
-  if (isloading) return <Typography variant="h3">...Loading</Typography>;
+  if (isloading) return <Loading message="Product Loading ..." />;
 
-  if (!product)
-    return <Typography variant="h3">...Product Not Found</Typography>;
+  if (!product) return <NotFound />;
 
   return (
     <React.Fragment>

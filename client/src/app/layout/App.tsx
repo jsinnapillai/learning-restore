@@ -5,9 +5,11 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import React, { useState } from "react";
+import { ToastContainer } from "react-toastify"; // then this
+import "react-toastify/dist/ReactToastify.css"; // import first
+
 import { Outlet } from "react-router-dom";
 
-import Catalog from "../features/catalog/Catalog";
 import Header from "./Header";
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
+        <ToastContainer position="bottom-right" hideProgressBar />
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
         <Container>
